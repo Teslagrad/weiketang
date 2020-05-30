@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://www.we7.cc" versionCode="0.52,0.6">
+	<application setting="true" >
+		<name><![CDATA[微擎模块备份工具]]></name>
+		<identifie><![CDATA[rusn_tools]]></identifie>
+		<version><![CDATA[1.0.4]]></version>
+		<type><![CDATA[business]]></type>
+		<ability><![CDATA[微擎模块备份工具]]></ability>
+		<description><![CDATA[微擎模块备份工具]]></description>
+		<author><![CDATA[RubySn0w]]></author>
+		<url><![CDATA[https://jq.qq.com/?_wv=1027&k=5dyJ8K9]]></url>
+	</application>
+	<platform>
+		<subscribes>
+		</subscribes>
+		<handles>
+		</handles>
+		<rule embed="false" />
+		<card embed="false" />
+		<supports>
+			<item type="app" />
+		</supports>
+	</platform>
+	<bindings>
+		<menu>
+			<entry title="模块打包" do="apppack" state="" direct="" />
+		</menu>
+	</bindings>
+	<permissions>
+	</permissions>
+	<install><![CDATA[]]></install>
+	<uninstall><![CDATA[]]></uninstall>
+	<upgrade><![CDATA[]]></upgrade>
+</manifest>

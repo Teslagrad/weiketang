@@ -1,0 +1,291 @@
+{template 'common/header'}
+<div class="clearfix">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;"><i class="fa fa-edit"></i> 模块配置参数</a>
+        </li>
+    </ul>
+    <div class="form-group"></div>
+    <div class="panel panel-info">
+        <div class="panel-heading">说明</div>
+        <div class="panel-body">
+		<p>1、此模块通过安装过的微擎模块逆向生成xml文件，文件打包的是addons文件夹下的相关模块文件夹。</p>
+		<p>2、模块打包方法都在本地生成，绝无远程获取模块的恶意代码，可放心使用，</p>
+		<p>3、借鉴了 模块云打包管理 和 黑人工具箱两个模块的一些方法，再此表示感谢。</p>
+		</div>
+    </div>
+    <form action="" method="post" class="form-horizontal form ">
+        <div class="panel panel-info">
+            <div class="panel-heading">模块筛选</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label text-right">关键词</label>
+                    <div id="search-module" class="col-sm-8 col-lg-9 col-xs-12">
+                        <input type="text" name="keyword" class="form-control" placeholder="输入关键词搜索模块" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label text-right"><span class="color-red">*</span>
+                        需要打包的模块：</label>
+                    <div class="col-sm-8 col-lg-9 col-xs-12">
+                        <select name="mname" class="form-control" id="name">
+                            <option value="">--请选择模块名称--</option>
+							{loop $modules $module}
+                            <option class="iteme" value={$module['name']} data-ver={$module['version']} data-title={$module['title']}>
+                                {$module['title']}_{$module['version']}(标识：{$module['name']})
+								</option>
+							{/loop} 
+
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label text-right">打包方式：</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div style="float: left">
+                            <label for="dotype1" class="radio-inline">
+                                <input type="radio" name="type" value="1" />打包模块所有文件</label>
+                            <label for="dotype2" class="radio-inline">
+                                <input type="radio" name="type" value="0" checked />只打包安装XML</label>
+                            <label for="dotype3" class="radio-inline">
+                                <input type="radio" name="type" value="2"  />生成schemas文件</label>								
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label text-right">保存方式：</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div >
+                            <label for="dosave1" class="radio-inline">
+                                <input type="radio" name="save" value="1" checked />本地</label>
+                            <label for="dosave2" class="radio-inline">
+                                <input type="radio" name="save" value="0"  />服务器</label>
+					<div class="help-block">
+						本地：直接下载到本地。服务器：保存在服务器根目录 " data/模块名/ "文件夹下。
+					</div>
+                        </div>
+
+                    </div>
+
+                </div>				
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">打包检测</label>
+                    <div class="col-sm-8 col-lg-9 col-xs-12">
+                        <p class="form-control-static" id="check-name">请选择模块...</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">选择该模块的数据表</label>
+                    <div class="col-sm-8 col-lg-9 col-xs-12">
+                        <input name="sname" id="search-sql" type="text" class="form-control" placeholder="数据库名称,输入关键词搜索数据表">
+						
+                    </div>
+                </div>
+				        <div class="form-group">
+            <div class="col-sm-8 col-lg-9 col-xs-12">
+                <input type="submit" name="submit" value="提交打包" class="btn btn-primary" />
+            </div>
+            <input type="hidden" name="token" value="{$_W['token']}" />
+            <input type="hidden" name="istheme" value="0" />
+        </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">数据表</div>
+            <div class="panel-body">
+                <div class="table-responsive panel-body">
+                    <table class="table table-hover" style="min-width: 300px;">
+                        <col width="260px" />
+                        <col width="10px" />
+                        <thead class="navbar-inner">
+                            <tr>
+                                <th class="we7-form">表名
+                                    <input id='checkall' type="checkbox" we7-check-all="1" name='tables[]' " />
+                                    <label for="checkall"></label>
+                                    <script> 
+									$("#checkall").click(function() { //给全选按钮加上点击事件
+										var xz = $(this).prop("checked"); //判断全选按钮的选中状态
+										$('.sqls').each(function() {
+											if ($(this).css('display') != 'none') {
+												var ck = $(this).find('input.tables').prop("checked", xz);
+											}
+										});
+									})
+                                   </script>									
+                                </th>
+                                <th class="we7-form">导出数据库
+                                    <input id='checkall1' type="checkbox" we7-check-all="1" name='add[]' " />
+                                    <label for="checkall1"></label>
+                                    <script>
+									$("#checkall1").click(function() { //给全选按钮加上点击事件
+										var xz = $(this).prop("checked"); //判断全选按钮的选中状态
+										$('.sqls').each(function() {
+											if ($(this).css('display') != 'none') {
+												var ck = $(this).find('input.add').prop("checked", xz);
+											}
+										});
+									})
+                                    </script>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+						   {loop $tables $tab}
+                            <tr class="sqls" data-title="{$tab}">
+                                <td>
+                                    <div  >
+                                        <input class="tables" type="checkbox" name="tables[]" value="{$tab}" />{$tab}</div>
+                                </td>
+                                <td>
+                                    <input class="add" type="checkbox" name="add[]" value="{$tab}" />
+                                </td>
+                            </tr>
+							{/loop} 
+							{if empty($tables)}
+                            <tr>
+                                <td>数据库内无表</td>
+                            </tr>
+							{/if}
+						</tbody>
+                    </table>
+					{$pager}
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+	$(function(){ 		
+		$('#search-module input').keyup(function() {
+				var a = $(this).val();				
+				$('.iteme').each(function() {
+					if(a.length > 0 && $(this).attr('data-title').indexOf(a) >= 0) {
+						$(this).prop("selected","true");
+						$('#name').change();
+					}
+				});				
+		});
+		
+		$('#search-sql').keyup(function() {
+				var a = $(this).val();
+				$("#checkret").hide();
+				$("input[name='tables[]']").each(function() {
+					$(this).removeAttr("checked");
+				});
+				
+				$("input[name='tables[]']").each(function() {						
+					if(a.length > 0 && $(this).val().indexOf(a) >= 0) {
+						$(this).prop("checked","true");
+					}						
+				});
+				
+				$('.sqls').hide();
+				$('.sqls').each(function() {
+					if(a.length > 0 && $(this).attr('data-title').indexOf(a) >= 0) {
+						$(this).show();						
+					}
+				});
+				if(a.length ==0) {
+					$('.sqls').show();
+				}
+		});
+				
+		$('#checkm').click(function(){
+			var bz = $('#name').children('option:selected').val();
+			if(bz == ''){
+				alert('请先选择模块');
+				return;
+			}
+			$('#checkret').show();
+			$('#checkret').html('开始检测模块防盗版代码,请稍后...');
+			$.ajax({
+				 type : "post",
+				 data : {'name' : bz,'do':'checkm','keyword':$('#check_keyword').val()},
+				 url : document.location.href ,
+				 dataType : "json",
+				 success : function(data){
+					
+
+					if(data.ret == '0'){
+						$('#checkret').html("检测结果:<br>报告老板危险了这些文件里藏有记号请打包后手动处理<br>"+ data.msg);
+					}else{
+						$('#checkret').html("检测结果:<br>OK了，暂未检测到防盗版代码可放心打包!");
+					}
+					
+				 },
+				 error:function(){
+					alert('检测失败!');
+				 }
+			});			
+		});
+		
+		$('#name').change(function(){
+			$("#checkret").hide();		
+			$("input[name='ver']").val($(this).children('option:selected').data('ver'));
+			$("input[name='title']").val($(this).children('option:selected').data('title'));
+			$.ajax({
+				 type : "get",
+				 data : {'name' : $(this).children('option:selected').val(),'checkmodule':1},
+				 url : document.location.href ,
+				 dataType : "json",
+				 success : function(data){
+					 $("input[name='sname']").val('');
+					 var a = '';
+					 if (data['errcode'] == '0') {
+						$("input[name='sname']").val(data['name']);
+						a = data['name'];
+						$('#check-name').html('<i class="fa fa-check text-success"></i> 标识:' + data['name'] + '  正常: 点击【提交】进行打包');
+					 	$('#check-name').css('color','#2f9206');
+					 } else  if (data['errcode'] == '1') {					
+						$('#check-name').html('<i class="fa fa-times text-warning"></i> 标识:' + data['name'] + '  异常: 未找到模块相关数据表,请下方自己选择');
+						$('#check-name').css('color','red');
+					 }else  if (data['errcode'] == '2') {					
+						$("input[name='sname']").val(data['sql_name']);
+						a = data['sql_name'];
+						$('#check-name').css('color','#000fff');					
+						$('#check-name').html('<i class="fa fa-times text-warning"></i> 【' + data['name'] + '】  未锁定相关数据表,已从服务器获取数据库表名');
+						
+					 }else  if (data['errcode'] == '404') {
+						$('#check-name').html('<i class="fa fa-times text-warning"></i> 异常: 请选择模块');
+					 }
+					 
+
+					$("input[name='tables[]']").each(function() {
+						$(this).removeAttr("checked");
+
+					});
+					
+					$("input[name='tables[]']").each(function() {						
+						if(a.length > 0 && $(this).val().indexOf(a) >= 0) {
+							$(this).prop("checked","true");
+						}
+							
+					});
+					
+					
+					$('.sqls').hide();
+					
+					$('.sqls').each(function() {
+					
+						if(a.length > 0 && $(this).attr('data-title').indexOf(a) >= 0) {
+							$(this).show();
+						}
+					});
+					if(a.length ==0) {
+						$('.sqls').show();
+					}
+					 
+
+				 },
+				 error:function(){
+					alert('连接服务器失败!');
+				 }
+			});
+
+			
+			
+		}) 
+	}) 
+</script>
+	{template 'common/footer'}
